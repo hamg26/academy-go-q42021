@@ -17,11 +17,16 @@ type pokeApiClient interface {
 	GetPokemon(string) (error, *models.PokemonDetails)
 }
 
+// Holds the PokeApi internal configuration
 type PokeApiClient struct {
 	client  httpClient
 	BaseUrl string
 }
 
+/*
+Request to the endpoint /pokemon/{id}
+Returns the details of a pokemon
+*/
 func (pokeApiClient *PokeApiClient) GetPokemon(id string) (err error, result *models.PokemonDetails) {
 	err = pokeApiClient.request(fmt.Sprintf("pokemon/%s", id), &result)
 	return err, result
@@ -47,6 +52,9 @@ func (pokeApiClient *PokeApiClient) request(endpoint string, obj interface{}) er
 	return json.Unmarshal(body, &obj)
 }
 
+/*
+Returns a new instance of the PokeAPI client
+*/
 func NewPokeApiClient(url string, client httpClient) *PokeApiClient {
 	return &PokeApiClient{BaseUrl: url, client: client}
 }

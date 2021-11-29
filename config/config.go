@@ -22,8 +22,12 @@ type config struct {
 	Logging bool
 }
 
+// Holds the config file information
 var C config
 
+/*
+Reads the config file and exposes the information
+*/
 func ReadConfig() {
 	Config := &C
 

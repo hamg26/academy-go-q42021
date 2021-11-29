@@ -13,9 +13,9 @@ type myCSV interface {
 	Save([]string) error
 }
 
+// Holds the CSV file information (path and cache)
 type MyCSV struct {
 	Filepath string
-	File     *os.File
 	Records  [][]string
 }
 
@@ -29,6 +29,11 @@ func closeFile(f *os.File) error {
 	return nil
 }
 
+/*
+Return all the rows from the csv file specified in the config file (C.CSV.Path)
+The first time it's called it reads the file content
+Every subsequent call uses an in-memory cache
+*/
 func (mycsv *MyCSV) FindAll() (error, [][]string) {
 	if mycsv.Records != nil {
 		log.Println("Returning cached records", mycsv.Filepath)
@@ -52,6 +57,10 @@ func (mycsv *MyCSV) FindAll() (error, [][]string) {
 	return err, records
 }
 
+/*
+Saves a new record to the CSV file specified in the config file (C.CSV.Path)
+Takes the cached records and just adds the new record, overwriting the entire file content
+*/
 func (mycsv *MyCSV) Save(record []string) error {
 	log.Println("Saving record", record, mycsv.Filepath)
 
@@ -78,6 +87,9 @@ func (mycsv *MyCSV) Save(record []string) error {
 	return err
 }
 
+/*
+Returns a new instance of the CSV datastore
+*/
 func NewCSV() *MyCSV {
 	fp := config.C.CSV.Path
 	return &MyCSV{Filepath: fp}

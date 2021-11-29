@@ -10,6 +10,10 @@ import (
 	controller "github.com/hamg26/academy-go-q42021/interface/controllers"
 )
 
+/*
+Returns a new instance of the Router
+Initializes the endpoints
+*/
 func NewRouter(e *echo.Echo, c controller.AppController) *echo.Echo {
 	config.ReadConfig()
 

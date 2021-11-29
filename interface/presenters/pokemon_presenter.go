@@ -10,10 +10,17 @@ import (
 type pokemonPresenter struct {
 }
 
+/*
+Returns a new instance of the Pokemon presenter
+Specific implementation of endpoint responses using an interactor
+*/
 func NewPokemonPresenter() presenter.PokemonPresenter {
 	return &pokemonPresenter{}
 }
 
+/*
+Formats the response with all the pokemons (no details)
+*/
 func (pp *pokemonPresenter) ResponsePokemons(ps []*model.Pokemon) []*model.Pokemon {
 	for _, p := range ps {
 		p.Name = strings.Title(strings.ToLower(p.Name))
@@ -22,6 +29,9 @@ func (pp *pokemonPresenter) ResponsePokemons(ps []*model.Pokemon) []*model.Pokem
 	return ps
 }
 
+/*
+Formats the response of a single pokemon (no details)
+*/
 func (pp *pokemonPresenter) ResponsePokemon(p *model.Pokemon) *model.Pokemon {
 	if p != nil {
 		p.Name = strings.Title(strings.ToLower(p.Name))
@@ -30,6 +40,9 @@ func (pp *pokemonPresenter) ResponsePokemon(p *model.Pokemon) *model.Pokemon {
 	return p
 }
 
+/*
+Formats the response of a single pokemon (with details)
+*/
 func (pp *pokemonPresenter) ResponsePokemonDetails(p *model.PokemonDetails) *model.PokemonDetails {
 	if p != nil {
 		p.Name = strings.Title(strings.ToLower(p.Name))

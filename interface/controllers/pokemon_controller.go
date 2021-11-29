@@ -12,10 +12,17 @@ type PokemonController struct {
 	pokemonInteractor interactor.PokemonInteractor
 }
 
+/*
+Returns a new instance of the Pokemon controller
+Specific implementation of endpoint requests using an interactor
+*/
 func NewPokemonController(ps interactor.PokemonInteractor) PokemonController {
 	return PokemonController{ps}
 }
 
+/*
+Response with all the pokemons
+*/
 func (uc PokemonController) GetPokemons(c Context) error {
 	var p []*model.Pokemon
 
@@ -27,6 +34,11 @@ func (uc PokemonController) GetPokemons(c Context) error {
 	return c.JSON(http.StatusOK, p)
 }
 
+/*
+Response with a specific pokemon
+Only reads from the pokemons existing locally
+Parameters from the request: Id (int)
+*/
 func (uc PokemonController) GetPokemon(c Context) error {
 	var p *model.Pokemon
 
@@ -47,6 +59,11 @@ func (uc PokemonController) GetPokemon(c Context) error {
 	return c.JSON(http.StatusOK, p)
 }
 
+/*
+Response with a specific pokemon details
+Request to API and saves the pokemon if it's not already saved
+Parameters from the request: Id (int)
+*/
 func (uc PokemonController) GetPokemonDetails(c Context) error {
 	var details *model.PokemonDetails
 

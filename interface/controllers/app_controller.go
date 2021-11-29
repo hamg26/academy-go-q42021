@@ -6,6 +6,7 @@ type pokemonController interface {
 	GetPokemonDetails(c Context) error
 }
 
+// Interface that defines the methods a controller should implement
 type AppController interface {
 	pokemonController
 }
