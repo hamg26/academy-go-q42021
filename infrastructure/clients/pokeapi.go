@@ -9,8 +9,6 @@ import (
 	models "github.com/hamg26/academy-go-q42021/domain/model"
 )
 
-const apiurl = "https://pokeapi.co/api/v2/"
-
 type httpClient interface {
 	Do(req *http.Request) (*http.Response, error)
 }

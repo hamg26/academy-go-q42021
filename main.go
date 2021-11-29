@@ -26,7 +26,7 @@ func main() {
 	client := &http.Client{Timeout: 10 * time.Second}
 
 	mycsv := datastore.NewCSV()
-	api := clients.NewPokeApiClient("https://pokeapi.co/api/v2/", client)
+	api := clients.NewPokeApiClient(config.C.API.BaseURL, client)
 
 	r := registry.NewRegistry(mycsv, api)
 

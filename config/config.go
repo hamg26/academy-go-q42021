@@ -16,6 +16,9 @@ type config struct {
 	Server struct {
 		Address string
 	}
+	API struct {
+		BaseURL string
+	}
 	Logging bool
 }
 
