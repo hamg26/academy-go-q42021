@@ -38,6 +38,10 @@ func (c *context) Set(key string, val interface{}) {
 	c.store[key] = val
 }
 
+func (c *context) Validate(interface{}) error {
+	return nil
+}
+
 func NewContextMock(t *testing.T, fakeError error, paramsValues map[string]string) controllers.Context {
 	t.Helper()
 	store := map[string]interface{}{

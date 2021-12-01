@@ -15,7 +15,7 @@ type MyCsvMock struct {
 	mock.Mock
 }
 
-func (mycsv *MyCsvMock) FindAll() (error, [][]string) {
+func (mycsv *MyCsvMock) FindAll(string, int, int) (error, [][]string) {
 	args := mycsv.Called()
 	if args.Get(0) != nil {
 		return args.Error(1), args.Get(0).([][]string)

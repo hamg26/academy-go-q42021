@@ -8,4 +8,5 @@ type Context interface {
 	Param(string) string
 	Get(key string) interface{}
 	Set(key string, val interface{})
+	Validate(interface{}) error
 }

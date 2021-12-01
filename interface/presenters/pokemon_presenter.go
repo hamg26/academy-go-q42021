@@ -1,6 +1,7 @@
 package presenter
 
 import (
+	"sort"
 	"strings"
 
 	"github.com/hamg26/academy-go-q42021/domain/model"
@@ -23,9 +24,11 @@ Formats the response with all the pokemons (no details)
 */
 func (pp *pokemonPresenter) ResponsePokemons(ps []*model.Pokemon) []*model.Pokemon {
 	for _, p := range ps {
-		p.Name = strings.Title(strings.ToLower(p.Name))
-		p.Type = strings.Title(strings.ToLower(p.Type))
+		pp.ResponsePokemon(p)
 	}
+	sort.Slice(ps, func(i, j int) bool {
+		return ps[i].Id < ps[j].Id
+	})
 	return ps
 }
 

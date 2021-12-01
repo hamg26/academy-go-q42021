@@ -8,8 +8,8 @@ import (
 
 func GetPokemons() []*model.Pokemon {
 	return []*model.Pokemon{
-		{Id: uint64(1), Name: "name1", Type: "type1"},
-		{Id: uint64(2), Name: "name2", Type: "type2"},
+		{Id: 1, Name: "name1", Type: "type1"},
+		{Id: 2, Name: "name2", Type: "type2"},
 	}
 }
 
@@ -19,7 +19,7 @@ func GetPokemonDetails() *model.PokemonDetails {
 	pokemonTypes := []model.PokemonTypeSlot{pokemonTypeSlot}
 
 	return &model.PokemonDetails{
-		Id:    uint64(1),
+		Id:    1,
 		Name:  "name1",
 		Types: pokemonTypes,
 	}
@@ -29,7 +29,7 @@ type PokemonInteractor struct {
 	mock.Mock
 }
 
-func (pi *PokemonInteractor) GetOne(id uint64) (error, *model.Pokemon) {
+func (pi *PokemonInteractor) GetOne(id int) (error, *model.Pokemon) {
 	args := pi.Called(id)
 	if args.Get(0) != nil {
 		return args.Error(1), args.Get(0).(*model.Pokemon)
@@ -37,7 +37,7 @@ func (pi *PokemonInteractor) GetOne(id uint64) (error, *model.Pokemon) {
 	return args.Error(1), nil
 }
 
-func (pi *PokemonInteractor) GetOneDetails(id string) (error, *model.PokemonDetails) {
+func (pi *PokemonInteractor) GetOneDetails(id int) (error, *model.PokemonDetails) {
 	args := pi.Called(id)
 	if args.Get(0) != nil {
 		return args.Error(1), args.Get(0).(*model.PokemonDetails)
@@ -51,6 +51,14 @@ func (pi *PokemonInteractor) SavePokemon(p *model.PokemonDetails) error {
 }
 
 func (pi *PokemonInteractor) GetAll() (error, []*model.Pokemon) {
+	args := pi.Called()
+	if args.Get(0) != nil {
+		return args.Error(1), args.Get(0).([]*model.Pokemon)
+	}
+	return args.Error(1), nil
+}
+
+func (pi *PokemonInteractor) GetAllConcurrent(string, int, int) (error, []*model.Pokemon) {
 	args := pi.Called()
 	if args.Get(0) != nil {
 		return args.Error(1), args.Get(0).([]*model.Pokemon)

@@ -28,7 +28,7 @@ type PokemonAbilities struct {
 // Pokemon details information
 type PokemonDetails struct {
 	Height                 int                `json:"height"`
-	Id                     uint64             `json:"id"`
+	Id                     int                `json:"id"`
 	IsDefault              bool               `json:"is_default"`
 	Name                   string             `json:"name"`
 	Order                  int                `json:"order"`

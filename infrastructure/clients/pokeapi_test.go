@@ -29,7 +29,7 @@ func TestPokeApiClient_GetPokemon(t *testing.T) {
 				assert.NotNil(t, result)
 				if assert.NotNil(t, result) {
 					assert.Equal(t, "Bulbasaur", result.Name)
-					assert.Equal(t, uint64(1), result.Id)
+					assert.Equal(t, 1, result.Id)
 				}
 			},
 		},
