@@ -7,8 +7,6 @@ import (
 	"os"
 	"strconv"
 	"sync"
-
-	"github.com/hamg26/academy-go-q42021/config"
 )
 
 type myCSV interface {
@@ -98,7 +96,7 @@ func (mycsv *MyCSV) FindAll(filter string, items, itemsPerWorker int) (error, []
 	return nil, allrows
 }
 
-func filterByIdType(items, itemsPerWorker int, rows chan []string, results chan []string, wg *sync.WaitGroup, filter string) {
+func filterByIdType(items, itemsPerWorker int, rows <-chan []string, results chan<- []string, wg *sync.WaitGroup, filter string) {
 	// Remove the worker from the wait-group once it finishes
 	defer wg.Done()
 
@@ -172,7 +170,6 @@ func (mycsv *MyCSV) Save(record []string) error {
 /*
 Returns a new instance of the CSV datastore
 */
-func NewCSV() *MyCSV {
-	fp := config.C.CSV.Path
-	return &MyCSV{Filepath: fp}
+func NewCSV(filePath string) *MyCSV {
+	return &MyCSV{Filepath: filePath}
 }

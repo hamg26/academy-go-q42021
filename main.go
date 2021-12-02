@@ -25,7 +25,7 @@ func main() {
 
 	client := &http.Client{Timeout: 10 * time.Second}
 
-	mycsv := datastore.NewCSV()
+	mycsv := datastore.NewCSV(config.C.CSV.Path)
 	api := clients.NewPokeApiClient(config.C.API.BaseURL, client)
 
 	r := registry.NewRegistry(mycsv, api)
