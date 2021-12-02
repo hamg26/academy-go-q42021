@@ -4,6 +4,7 @@ import (
 	"encoding/csv"
 	"io"
 	"log"
+	"math"
 	"os"
 	"strconv"
 	"sync"
@@ -54,9 +55,10 @@ func (mycsv *MyCSV) FindAll(filter string, items, itemsPerWorker int) (error, []
 	wg := new(sync.WaitGroup)
 
 	// Start up some workers
-	numberOfWorkers := (items / itemsPerWorker)
+	numberOfWorkers := int(math.Round(float64(items / itemsPerWorker)))
 	if numberOfWorkers <= 0 {
 		numberOfWorkers = 1
+		itemsPerWorker = items
 	}
 	for w := 1; w <= numberOfWorkers; w++ {
 		wg.Add(1)
@@ -91,6 +93,10 @@ func (mycsv *MyCSV) FindAll(filter string, items, itemsPerWorker int) (error, []
 		if len(r) != 0 {
 			allrows = append(allrows, r)
 		}
+	}
+
+	if err := closeFile(f); err != nil {
+		return err, nil
 	}
 
 	return nil, allrows
