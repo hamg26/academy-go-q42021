@@ -47,15 +47,11 @@ func (mycsv *MyCSV) FindAll(filter string, items, itemsPerWorker int) (error, []
 
 	jobs := make(chan []string)
 	results := make(chan []string)
-	if items != -1 {
-		// Needs to be  a buffered channel to get the number of results across all the workers
-		results = make(chan []string, items)
-	}
 
 	wg := new(sync.WaitGroup)
 
 	// Start up some workers
-	numberOfWorkers := int(math.Round(float64(items / itemsPerWorker)))
+	numberOfWorkers := int(math.Ceil(float64(items) / float64(itemsPerWorker)))
 	if numberOfWorkers <= 0 {
 		numberOfWorkers = 1
 		itemsPerWorker = items
@@ -80,6 +76,10 @@ func (mycsv *MyCSV) FindAll(filter string, items, itemsPerWorker int) (error, []
 		}
 
 		close(jobs)
+
+		if err := closeFile(f); err != nil {
+			log.Fatal(err)
+		}
 	}()
 
 	// Aggregate the results and close the result channel
@@ -90,13 +90,9 @@ func (mycsv *MyCSV) FindAll(filter string, items, itemsPerWorker int) (error, []
 
 	allrows := make([][]string, 0)
 	for r := range results {
-		if len(r) != 0 {
+		if len(r) != 0 && (items == -1 || len(allrows) < items) {
 			allrows = append(allrows, r)
 		}
-	}
-
-	if err := closeFile(f); err != nil {
-		return err, nil
 	}
 
 	return nil, allrows
@@ -110,15 +106,8 @@ func filterByIdType(items, itemsPerWorker int, rows <-chan []string, results cha
 	counter := 0
 
 	for row := range rows {
-		totalFound := len(results)
-
 		// Already processed all items for this worker
 		if items != -1 && itemsPerWorker != -1 && counter >= itemsPerWorker {
-			break
-		}
-
-		// Already met the total items limit
-		if items != -1 && (totalFound >= items || counter >= items) {
 			break
 		}
 

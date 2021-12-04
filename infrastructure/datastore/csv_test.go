@@ -96,7 +96,7 @@ func TestMyCSV_FindAll(t *testing.T) {
 			assert: func(t *testing.T, results [][]string, err error) {
 				assert.Nil(t, err)
 				assert.NotNil(t, results)
-				assert.Equal(t, 4, len(results))
+				assert.Equal(t, 5, len(results))
 			},
 		},
 	}
