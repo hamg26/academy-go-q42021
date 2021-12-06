@@ -3,13 +3,13 @@ package router
 import (
 	"log"
 
-	"github.com/go-playground/validator"
-	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
-
 	"github.com/hamg26/academy-go-q42021/config"
 	"github.com/hamg26/academy-go-q42021/infrastructure/validators"
 	controller "github.com/hamg26/academy-go-q42021/interface/controllers"
+
+	"github.com/go-playground/validator"
+	"github.com/labstack/echo"
+	"github.com/labstack/echo/middleware"
 )
 
 /*

@@ -6,13 +6,13 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/labstack/echo"
-
 	"github.com/hamg26/academy-go-q42021/config"
 	clients "github.com/hamg26/academy-go-q42021/infrastructure/clients"
 	"github.com/hamg26/academy-go-q42021/infrastructure/datastore"
 	"github.com/hamg26/academy-go-q42021/infrastructure/router"
 	"github.com/hamg26/academy-go-q42021/registry"
+
+	"github.com/labstack/echo"
 )
 
 func main() {

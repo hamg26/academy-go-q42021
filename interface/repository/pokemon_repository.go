@@ -37,6 +37,10 @@ func (pr *pokemonRepository) FindAll() (error, []*model.Pokemon) {
 	return pr.FindAllConcurrent("", -1, -1)
 }
 
+/*
+Returns all the Pokemons in the CSV datastore
+Uses a workers pool to read and filter the data
+*/
 func (pr *pokemonRepository) FindAllConcurrent(filter string, items, itemsPerWorker int) (error, []*model.Pokemon) {
 	err, records := pr.mycsv.FindAll(filter, items, itemsPerWorker)
 
