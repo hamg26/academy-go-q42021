@@ -8,20 +8,22 @@ import (
 	"github.com/hamg26/academy-go-q42021/usecase/interactor"
 )
 
-type pokemonController struct {
+type PokemonController struct {
 	pokemonInteractor interactor.PokemonInteractor
 }
 
-type PokemonController interface {
-	GetPokemons(c Context) error
-	GetPokemon(c Context) error
-}
-
+/*
+Returns a new instance of the Pokemon controller
+Specific implementation of endpoint requests using an interactor
+*/
 func NewPokemonController(ps interactor.PokemonInteractor) PokemonController {
-	return &pokemonController{ps}
+	return PokemonController{ps}
 }
 
-func (uc *pokemonController) GetPokemons(c Context) error {
+/*
+Response with all the pokemons
+*/
+func (uc PokemonController) GetPokemons(c Context) error {
 	var p []*model.Pokemon
 
 	err, p := uc.pokemonInteractor.GetAll()
@@ -32,7 +34,12 @@ func (uc *pokemonController) GetPokemons(c Context) error {
 	return c.JSON(http.StatusOK, p)
 }
 
-func (uc *pokemonController) GetPokemon(c Context) error {
+/*
+Response with a specific pokemon
+Only reads from the pokemons existing locally
+Parameters from the request: Id (int)
+*/
+func (uc PokemonController) GetPokemon(c Context) error {
 	var p *model.Pokemon
 
 	id, e := strconv.ParseUint(c.Param("id"), 10, 64)
@@ -50,4 +57,36 @@ func (uc *pokemonController) GetPokemon(c Context) error {
 	}
 
 	return c.JSON(http.StatusOK, p)
+}
+
+/*
+Response with a specific pokemon details
+Request to API and saves the pokemon if it's not already saved
+Parameters from the request: Id (int)
+*/
+func (uc PokemonController) GetPokemonDetails(c Context) error {
+	var details *model.PokemonDetails
+
+	rawid := c.Param("id")
+
+	id, e := strconv.ParseUint(rawid, 10, 64)
+	if e != nil {
+		return c.JSON(http.StatusBadRequest, "Id should be an integer")
+	}
+
+	err, details := uc.pokemonInteractor.GetOneDetails(rawid)
+	if err != nil {
+		return err
+	}
+
+	if details == nil {
+		return c.JSON(http.StatusNotFound, "Pokemon not found")
+	}
+
+	_, p := uc.pokemonInteractor.GetOne(id)
+	if p == nil {
+		uc.pokemonInteractor.SavePokemon(details)
+	}
+
+	return c.JSON(http.StatusOK, details)
 }

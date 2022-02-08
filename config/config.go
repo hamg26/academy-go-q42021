@@ -16,11 +16,18 @@ type config struct {
 	Server struct {
 		Address string
 	}
+	API struct {
+		BaseURL string
+	}
 	Logging bool
 }
 
+// Holds the config file information
 var C config
 
+/*
+Reads the config file and exposes the information
+*/
 func ReadConfig() {
 	Config := &C
 
@@ -30,7 +37,6 @@ func ReadConfig() {
 	viper.AutomaticEnv()
 
 	if err := viper.ReadInConfig(); err != nil {
-		fmt.Println(err)
 		log.Fatalln(err)
 	}
 

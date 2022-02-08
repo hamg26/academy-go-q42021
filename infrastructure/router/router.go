@@ -7,9 +7,13 @@ import (
 	"github.com/labstack/echo/middleware"
 
 	"github.com/hamg26/academy-go-q42021/config"
-	"github.com/hamg26/academy-go-q42021/interface/controllers"
+	controller "github.com/hamg26/academy-go-q42021/interface/controllers"
 )
 
+/*
+Returns a new instance of the Router
+Initializes the endpoints
+*/
 func NewRouter(e *echo.Echo, c controller.AppController) *echo.Echo {
 	config.ReadConfig()
 
@@ -24,5 +28,6 @@ func NewRouter(e *echo.Echo, c controller.AppController) *echo.Echo {
 
 	e.GET("/pokemons", func(context echo.Context) error { return c.GetPokemons(context) })
 	e.GET("/pokemons/:id", func(context echo.Context) error { return c.GetPokemon(context) })
+	e.GET("/pokemons/:id/details", func(context echo.Context) error { return c.GetPokemonDetails(context) })
 	return e
 }

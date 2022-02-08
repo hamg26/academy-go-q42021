@@ -3,10 +3,13 @@ package main
 import (
 	"io/ioutil"
 	"log"
+	"net/http"
+	"time"
 
 	"github.com/labstack/echo"
 
 	"github.com/hamg26/academy-go-q42021/config"
+	clients "github.com/hamg26/academy-go-q42021/infrastructure/clients"
 	"github.com/hamg26/academy-go-q42021/infrastructure/datastore"
 	"github.com/hamg26/academy-go-q42021/infrastructure/router"
 	"github.com/hamg26/academy-go-q42021/registry"
@@ -20,15 +23,12 @@ func main() {
 		log.SetFlags(0)
 	}
 
-	err, mycsv := datastore.NewCSV()
+	client := &http.Client{Timeout: 10 * time.Second}
 
-	if err != nil {
-		panic(err)
-	}
+	mycsv := datastore.NewCSV()
+	api := clients.NewPokeApiClient(config.C.API.BaseURL, client)
 
-	defer mycsv.Close()
-
-	r := registry.NewRegistry(mycsv)
+	r := registry.NewRegistry(mycsv, api)
 
 	e := echo.New()
 	e = router.NewRouter(e, r.NewAppController())
