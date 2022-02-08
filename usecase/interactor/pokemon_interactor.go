@@ -11,10 +11,12 @@ type pokemonInteractor struct {
 	PokemonPresenter  presenter.PokemonPresenter
 }
 
+// Interface that defines the methods a PokemonInteractor should implement
 type PokemonInteractor interface {
 	GetAll() (error, []*model.Pokemon)
-	GetOne(id uint64) (error, *model.Pokemon)
-	GetOneDetails(id string) (error, *model.PokemonDetails)
+	GetAllConcurrent(filter string, items, itemsPerWorker int) (error, []*model.Pokemon)
+	GetOne(id int) (error, *model.Pokemon)
+	GetOneDetails(id int) (error, *model.PokemonDetails)
 	SavePokemon(*model.PokemonDetails) error
 }
 
@@ -37,10 +39,20 @@ func (ps *pokemonInteractor) GetAll() (error, []*model.Pokemon) {
 }
 
 /*
+Returns all the pokemons in the repository using multiple workers
+The pokemons are formated to be send as response
+*/
+func (ps *pokemonInteractor) GetAllConcurrent(filter string, items, itemsPerWorker int) (error, []*model.Pokemon) {
+	err, p := ps.PokemonRepository.FindAllConcurrent(filter, items, itemsPerWorker)
+
+	return err, ps.PokemonPresenter.ResponsePokemons(p)
+}
+
+/*
 Returns a specific pokemon from the repository
 The pokemon is formated to be send as response
 */
-func (ps *pokemonInteractor) GetOne(id uint64) (error, *model.Pokemon) {
+func (ps *pokemonInteractor) GetOne(id int) (error, *model.Pokemon) {
 	err, p := ps.PokemonRepository.FindOne(id)
 
 	return err, ps.PokemonPresenter.ResponsePokemon(p)
@@ -50,7 +62,7 @@ func (ps *pokemonInteractor) GetOne(id uint64) (error, *model.Pokemon) {
 Returns a specific pokemon from the repository, including more details
 The pokemon is formated to be send as response
 */
-func (ps *pokemonInteractor) GetOneDetails(id string) (error, *model.PokemonDetails) {
+func (ps *pokemonInteractor) GetOneDetails(id int) (error, *model.PokemonDetails) {
 	err, p := ps.PokemonRepository.FindOneDetails(id)
 
 	return err, ps.PokemonPresenter.ResponsePokemonDetails(p)

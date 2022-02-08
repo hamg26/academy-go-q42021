@@ -6,13 +6,13 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/labstack/echo"
-
 	"github.com/hamg26/academy-go-q42021/config"
 	clients "github.com/hamg26/academy-go-q42021/infrastructure/clients"
 	"github.com/hamg26/academy-go-q42021/infrastructure/datastore"
 	"github.com/hamg26/academy-go-q42021/infrastructure/router"
 	"github.com/hamg26/academy-go-q42021/registry"
+
+	"github.com/labstack/echo"
 )
 
 func main() {
@@ -25,7 +25,7 @@ func main() {
 
 	client := &http.Client{Timeout: 10 * time.Second}
 
-	mycsv := datastore.NewCSV()
+	mycsv := datastore.NewCSV(config.C.CSV.Path)
 	api := clients.NewPokeApiClient(config.C.API.BaseURL, client)
 
 	r := registry.NewRegistry(mycsv, api)

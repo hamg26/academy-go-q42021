@@ -6,6 +6,7 @@ import (
 
 	models "github.com/hamg26/academy-go-q42021/domain/model"
 	"github.com/hamg26/academy-go-q42021/testutil"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -29,7 +30,7 @@ func TestPokeApiClient_GetPokemon(t *testing.T) {
 				assert.NotNil(t, result)
 				if assert.NotNil(t, result) {
 					assert.Equal(t, "Bulbasaur", result.Name)
-					assert.Equal(t, uint64(1), result.Id)
+					assert.Equal(t, 1, result.Id)
 				}
 			},
 		},
