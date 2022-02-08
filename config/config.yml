@@ -1,0 +1,5 @@
+csv:
+  path: 'pokemons.csv'
+server:
+  address: 3031
+logging: true
